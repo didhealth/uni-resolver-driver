@@ -1,5 +1,24 @@
 'use strict';
+const Web3 = require('web3');
+const web3 = new Web3('<YOUR_ETHEREUM_NODE_ENDPOINT>');
 
+const CONTRACT_ABI = [/* Your contract ABI here */];
+
+async function resolveDID(chainid, didsuffix) {
+    const chainInfo = getChainInfo(chainid);
+    
+    if (!chainInfo) {
+        throw new Error(`Unknown chain ID: ${chainid}`);
+    }
+    
+    const contractAddress = chainInfo.contractAddress;
+    const contract = new web3.eth.Contract(CONTRACT_ABI, contractAddress);
+    
+    // This assumes the contract has a function called 'resolveDID' that takes a didsuffix as argument
+    const didDocument = await contract.methods.resolveDID(didsuffix).call();
+    
+    return didDocument;
+}
 
 /**
  * Resolve a DID or other identifier.
@@ -10,26 +29,11 @@
  **/
 exports.resolve = function(identifier,accept) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['did:example:0000000000123456'] = {
-      "@context": "https://www.w3.org/2019/did/v1",
-      "id" : "did:example:0000000000123456",
-      "publicKey" : [ {
-        "id" : "did:example:0000000000123456#key-1",
-        "type" : "Ed25519VerificationKey2018",
-        "publicKeyBase58" : "H3C2AVvLMv6gmMNam3uVAjZpfkcJCwDwnZn6z3wXmqPV"
-      } ]
-    };
-    examples['did:example:0000000000456789'] = {
-      "@context": "https://www.w3.org/2019/did/v1",
-      "id" : "did:example:0000000000456789",
-      "publicKey" : [ {
-        "id" : "did:example:0000000000456789#key-1",
-        "type" : "Ed25519VerificationKey2018",
-        "publicKeyBase58": "EKmHWjiDDeMhEBs75uv86dC89zZ6yTTxEAHkYroJ7wZP"
-      } ]
-    };
-    var found = examples[identifier];
+    let didDocument
+    didDocument = resolveDID(parseDID(identifier))
+    var diddocument = convertToDidDocument(didDocument );
+    
+    var found = diddocument[identifier];
     if (found) {
       resolve(found);
     } else {
@@ -37,4 +41,84 @@ exports.resolve = function(identifier,accept) {
     }
   });
 }
+
+function parseDID(did) {
+  const parts = did.split(":");
+  const combined = parts[2];
+  const chainid = combined.slice(0, -4);
+  const didsuffix = combined.slice(-4);  
+  return { chainid, didsuffix };
+}
+
+const chainMap = {
+  "0001": {
+      network: "mainnet",
+      contractAddress: "0x1234abcd..."
+  },
+  "0002": {
+      network: "rinkeby",
+      contractAddress: "0x5678efgh..."
+  }
+  // ... add other chain IDs as necessary
+};
+
+function getChainInfo(chainid) {
+  return chainMap[chainid];
+}
+
+
+export function convertToDidDocument (resolvedDid){
+  if (!resolvedDid || !resolvedDid.healthDid) return null;
+
+  return {
+    "@context": "https://www.w3.org/ns/did/v1",
+    "id": `did:health:${resolvedDid.healthDid}`,
+    "verificationMethod": [
+      {
+        "id": `did:health:${resolvedDid.healthDid}#keys-1`,
+        "type": "EcdsaSecp256k1RecoveryMethod2020",
+        "controller": `did:health:${resolvedDid.healthDid}`,
+        "publicKeyBase58": resolvedDid.owner,
+        "threshold": {
+          "n": 5,
+          "t": 3
+        }
+      }
+    ],
+    "authentication": [
+      `did:health:${resolvedDid.healthDid}#keys-1`
+    ],
+    "assertionMethod": [
+      `did:health:${resolvedDid.healthDid}#keys-1`
+    ],
+    "capabilityInvocation": [
+      `did:health:${resolvedDid.healthDid}#keys-1`
+    ],
+    "capabilityDelegation": [
+      `did:health:${resolvedDid.healthDid}#keys-1`
+    ],
+    "keyAgreement": [
+      {
+        "id": `did:health:${resolvedDid.healthDid}#keys-2`,
+        "type": "EcdsaSecp256k1RecoveryMethod2020",
+        "controller": `did:health:${resolvedDid.healthDid}`,
+        "publicKeyBase58": resolvedDid.owner,
+        "threshold": {
+          "n": 5,
+          "t": 3
+        }
+      }
+    ],
+    "service": [
+      {
+        "id": `did:health:${resolvedDid.healthDid}#patient`,
+        "type": "Patient", // Assuming this is the type
+        "serviceEndpoint": resolvedDid.ipfsUri,
+        "description": "Access to the Pateint Demographics secured by LIT Protocol and stored on IPFS."
+      }
+    ]
+  };
+
+};
+
 

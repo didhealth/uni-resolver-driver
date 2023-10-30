@@ -1,8 +1,6 @@
 # Dockerfile for exampleorg/uni-resolver-driver-did-example
 
 FROM node:10
-MAINTAINER Markus Sabadello <markus@danubetech.com>
-
 # build uni-resolver-driver-did-example
 
 WORKDIR /usr/src/app
