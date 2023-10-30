@@ -51,15 +51,15 @@ function parseDID(did) {
 }
 
 const chainMap = {
-  "0001": {
+  "000001": {
       network: "mainnet",
       contractAddress: "0x1234abcd..."
   },
-  "0002": {
-      network: "rinkeby",
+  "000005": {
+      network: "goerli",
       contractAddress: "0x5678efgh..."
   }
-  // ... add other chain IDs as necessary
+
 };
 
 function getChainInfo(chainid) {
