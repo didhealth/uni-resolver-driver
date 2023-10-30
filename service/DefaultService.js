@@ -1,8 +1,8 @@
 'use strict';
+require('dotenv').config();
 const Web3 = require('web3');
-const web3 = new Web3('<YOUR_ETHEREUM_NODE_ENDPOINT>');
-
-const CONTRACT_ABI = [/* Your contract ABI here */];
+const web3 = new Web3(process.env.ETHEREUM_NODE_ENDPOINT);
+const CONTRACT_ABI = JSON.parse(process.env.CONTRACT_ABI);
 
 async function resolveDID(chainid, didsuffix) {
     const chainInfo = getChainInfo(chainid);
@@ -27,26 +27,30 @@ async function resolveDID(chainid, didsuffix) {
  * accept String The requested MIME type of the DID document or DID resolution result. (optional)
  * returns Object
  **/
-exports.resolve = function(identifier,accept) {
-  return new Promise(function(resolve, reject) {
-    let didDocument
-    didDocument = resolveDID(parseDID(identifier))
-    var diddocument = convertToDidDocument(didDocument );
-    
-    var found = diddocument[identifier];
-    if (found) {
-      resolve(found);
-    } else {
-      resolve(404);
-    }
+exports.resolve = function(identifier, accept) {
+  return new Promise(async function(resolve, reject) {
+      try {
+          const didData = parseDID(identifier);
+          const didDocumentRaw = await resolveDID(didData.chainid, didData.didsuffix);
+          const diddocument = convertToDidDocument(didDocumentRaw);
+          const found = diddocument[identifier];
+          
+          if (found) {
+              resolve(found);
+          } else {
+              resolve(404);  // Consider changing this to a more descriptive error or rejection
+          }
+      } catch (error) {
+          reject(error);  // You might want to handle specific error types or messages here
+      }
   });
 }
 
 function parseDID(did) {
   const parts = did.split(":");
   const combined = parts[2];
-  const chainid = combined.slice(0, -4);
-  const didsuffix = combined.slice(-4);  
+  const chainid = combined.slice(0, -6);
+  const didsuffix = combined.slice(-6);  
   return { chainid, didsuffix };
 }
 
