@@ -2,7 +2,7 @@
 
 # Universal Resolver Driver: did:health
 
-This is an the [Universal Resolver](https://github.com/decentralized-identity/universal-resolver/) driver for **did:health** identifiers.
+This is an the [Universal Resolver](https://github.com/decentralized-identity/universal-resolver/) driver for **did:health** identifiers.  did:health identifiers allow users to link their service endpoints for FHIR Resources that relate to the person's healthcare or provision thereof.
 
 ## Specifications
 
@@ -11,8 +11,8 @@ This is an the [Universal Resolver](https://github.com/decentralized-identity/un
 ## Example DIDs
 
 ```
-did:health:0000000000123456
-did:health:0000000000456789
+did:health:000005rreere8
+did:health:000005saasas1234
 ```
 
 ## Build and Run (Docker)
