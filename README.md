@@ -26,6 +26,7 @@ curl -X GET [http://localhost:8080/1.0/identifiers/did:health:0000000000123456](
 ## Build and Run (NodeJS)
 
 ```
+npm install
 npm start
 ```
 
