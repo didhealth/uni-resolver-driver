@@ -1,6 +1,6 @@
 # Specification for the did:health DID method
 
-... TODO ...
+[See the Official Specification](https://github.com/didhealth/health-did-resolver/blob/main/doc/did-method-spec.md)
 
 See the following resources for information on DID method specifications:
 
