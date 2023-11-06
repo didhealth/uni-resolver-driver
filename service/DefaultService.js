@@ -4,23 +4,23 @@ const Web3 = require('web3').Web3;
 
 
 async function resolveDID(chainid, didsuffix) {
-    console.log("resolver function")
+    //console.log("resolver function")
     const chainInfo = getChainInfo(chainid);
     
     if (!chainInfo) {
         throw new Error(`Unknown chain ID: ${chainid}`);
     }
-    console.log(process.env.ETHEREUM_NODE_ENDPOINT)
+    //console.log(process.env.ETHEREUM_NODE_ENDPOINT)
     const web3 = new Web3(process.env.ETHEREUM_NODE_ENDPOINT);
     const contractAddress = chainInfo.contractAddress;
-    console.log(contractAddress)
+    //console.log(contractAddress)
     const CONTRACT_ABI = JSON.parse(process.env.CONTRACT_ABI);
-    console.log(CONTRACT_ABI)
+    //console.log(CONTRACT_ABI)
     const contract = new web3.eth.Contract(CONTRACT_ABI, contractAddress);
 
     console.log("callling contract method for GetHealthDID for did:health:" + chainid+didsuffix)
     // This assumes the contract has a function called 'resolveDID' that takes a didsuffix as argument
-    console.log(contract.methods)
+    //console.log(contract.methods)
     const didDocument = await contract.methods.getHealtDID(chainid+didsuffix).call(); //Function is named wrong
     console.log(didDocument)
     return didDocument;
@@ -37,13 +37,13 @@ async function resolveDID(chainid, didsuffix) {
 exports.resolve = function(identifier, accept) {
   return new Promise(async function(resolve, reject) {
       try {
-          console.log('resolving ' + identifier)
+//          console.log('resolving ' + identifier)
           const didData = parseDID(identifier);
-          console.log("parsed did:health:" + didData.chainid + '----' + didData.didsuffix)
+          //console.log("parsed did:health:" + didData.chainid + '----' + didData.didsuffix)
           const didDocumentRaw = await resolveDID(didData.chainid, didData.didsuffix);
-          console.log('converting to json')
+          //console.log('converting to json')
           const diddocument = convertToDidDocument(didDocumentRaw);
-          console.log(diddocument)
+          //console.log(diddocument)
           const found = diddocument//[identifier];
           
           if (found) {
