@@ -18,9 +18,9 @@ did:health:000005saasas1234
 ## Build and Run (Docker)
 
 ```
-docker build -f ./docker/Dockerfile . -t exampleorg/uni-resolver-driver-did-example
-docker run -p 8080:8080 exampleorg/uni-resolver-driver-did-example
-curl -X GET http://localhost:8080/1.0/identifiers/did:example:0000000000123456
+docker build -f ./docker/Dockerfile . -t didhealth/uni-resolver-driver-did-health
+docker run -p 8080:8080 didhealth/uni-resolver-driver-did-health
+curl -X GET [http://localhost:8080/1.0/identifiers/did:health:0000000000123456](http://localhost:8080/1.0/identifiers/did:health:000005rreere8)
 ```
 
 ## Build and Run (NodeJS)
@@ -33,13 +33,5 @@ npm start
 
 The driver recognizes the following environment variables:
 
-### `uniresolver_driver_did_example_exampleSetting`
-
- * An example setting for the driver.
- * Default value: (empty string)
-
-## Driver Metadata
-
-The driver returns the following metadata in addition to a DID document:
-
-* `exampleMetadata`: Example metadata
+ETHEREUM_NODE_ENDPOINT=https://goerli.infura.io/v3/YOURAPIKEY
+CONTRACT_ABI=[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"string","name":"_healthDid","type":"string"},{"internalType":"string[]","name":"_uris","type":"string[]"}],"name":"addAltData","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_peerAddress","type":"address"},{"internalType":"string","name":"_healthDid","type":"string"}],"name":"addDelegateAddress","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"addressDidMapping","outputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"string","name":"healthDid","type":"string"},{"internalType":"string","name":"ipfsUri","type":"string"},{"internalType":"uint8","name":"reputationScore","type":"uint8"},{"internalType":"bool","name":"hasWorldId","type":"bool"},{"internalType":"bool","name":"hasPolygonId","type":"bool"},{"internalType":"bool","name":"hasSocialId","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"}],"name":"delegateAddresses","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getChainID","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_healthDid","type":"string"}],"name":"getHealtDID","outputs":[{"components":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address[]","name":"delegateAddresses","type":"address[]"},{"internalType":"string","name":"healthDid","type":"string"},{"internalType":"string","name":"ipfsUri","type":"string"},{"internalType":"string[]","name":"altIpfsUris","type":"string[]"},{"internalType":"uint8","name":"reputationScore","type":"uint8"},{"internalType":"bool","name":"hasWorldId","type":"bool"},{"internalType":"bool","name":"hasPolygonId","type":"bool"},{"internalType":"bool","name":"hasSocialId","type":"bool"}],"internalType":"struct Structs.HealthDID","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_healthDID","type":"string"},{"internalType":"string","name":"_uri","type":"string"}],"name":"registerDID","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_peerAddress","type":"address"},{"internalType":"string","name":"_healthDid","type":"string"}],"name":"removeDelegateAddress","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"did","type":"string"}],"name":"resolveChainId","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"pure","type":"function"},{"inputs":[{"internalType":"string","name":"_source","type":"string"}],"name":"stringToBytes32","outputs":[{"internalType":"bytes32","name":"_result","type":"bytes32"}],"stateMutability":"pure","type":"function"},{"inputs":[{"internalType":"address","name":"_newAddress","type":"address"},{"internalType":"string","name":"_healthDid","type":"string"}],"name":"transferOwnership","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_healthDid","type":"string"},{"internalType":"string","name":"_uri","type":"string"}],"name":"updateDIDData","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"}]
