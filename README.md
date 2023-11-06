@@ -18,7 +18,7 @@ did:health:000005saasas1234
 ## Build and Run (Docker)
 
 ```
-docker build -f ./docker/Dockerfile . -t didhealth/uni-resolver-driver-did-health
+docker build -f -t didhealth/uni-resolver-driver-did-health .
 docker run -p 8080:8080 didhealth/uni-resolver-driver-did-health
 curl -X GET [http://localhost:8080/1.0/identifiers/did:health:0000000000123456](http://localhost:8080/1.0/identifiers/did:health:000005rreere8)
 ```
